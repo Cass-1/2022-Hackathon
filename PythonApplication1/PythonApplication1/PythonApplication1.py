@@ -102,17 +102,20 @@ def get_action(room, actions):
         
 #Summary: allows the player to move or talk
 #Parameters: the current room and a user input action
-#Returns: the new room the player is in
+#Returns: the new room the player is in, the next step string and if the player has new followers
 #Precond: user input has to be in the allowed actions
 #Postcond: a newRoom has been returned
 def talk_and_move(currentRoom, userInput):
 
     successfulMovement = False
+    newFollowers = False
     nextStepStr = ""
     
     #what to do based on input
     if userInput == "talk":
         print(currentRoom.personInRoom.conversation())
+        if(currentRoom.name == "Upstairs Study Lounge"):
+            newFollowers = True
         nextStepStr = "You have now talked to everyone here"
     elif userInput == "forward":
         successfulMovement, newRoom = check_movement(currentRoom, "forward")
@@ -128,33 +131,45 @@ def talk_and_move(currentRoom, userInput):
         
     if successfulMovement == True:
         nextStepStr = "Moved rooms"
-        return newRoom, nextStepStr
+        return newRoom, nextStepStr, newFollwers
     else:
         nextStepStr = "Rememeber, you're late! Please enter a room you can travel too"
-        return currentRoom, nextStepStr
+        return currentRoom, nextStepStr, newFollowers
 
 
-
-def main():
+#Summary: The todd hall building
+#Parameters: none
+#Returns: the number of new followers you have 0 or 1
+#Precond: none
+#Postcond: none
+def toddHall():
+    newFollowers = False;
     #People
-    sparkManagerTopics = ["The weather sure is nice!", "You should stop by and grab some coffee!"]
-    SparkDeskManager = Person("Mark", "Desk Manager",sparkManagerTopics , False)
+    #buisnessStudentTopics = ["I have midterms this week! I don't have time to talk!", "I don't have time to hear about your Hackathon! I have exams!"]
+    #SparkDeskManager = Person("Mark", "Desk Manager",buisnessStudentTopics , False)
 
     cafeAttendentTopics = ["Welcome! We have a staffing shortage right now so no coffe is available, sorry.", "Hello! Sadly we are not open right now. We're closed for a cleaning."]
-    CafeAttendant = Person("Samantha", "Student",cafeAttendentTopics , False)
+    cafeAttendent = Person("Samantha", "Student",cafeAttendentTopics , False)
 
-    cryingStudentTopics = ["Thanks for talking with me. I've had a very long day", "I really appreciate you talking to me. It's been nice to see a friendly face!"]
-    CryingStudent = Person("Robert", "Student",cryingStudentTopics , True)
+    angryStudentTopics = ["What the h*** is wrong with you Gary we had a deal!\n...\nWhy are you inturupting us?!\n...\n....\nOk fair point but...\n...\nOk ok fine. I guess you're right. I guess we can reach an agreement"]
+    AngryStudent = Person("Robert", "Student",angryStudentTopics , True)
 
     sleepingStudentTopics = ["Zzzz....", "Mghrh....zzzzz.."]
     SleepingStudent = Person("Jane", "Student",sleepingStudentTopics , False)
 
+    #sleepingStudentTopics = ["Zzzz....", "Mghrh....zzzzz.."]
+    #SleepingStudent = Person("Jane", "Student",sleepingStudentTopics , False)
+
 
     #Room Descriptions
-    entranceDescription = "You pass through the large main doors and find yourslef inside of The Spark. You glance around and notice a person sitting at the front desk are greated with a large staircase forward, a cafe to your left, and an exit behind you."
-    cafeDescription = "You are in the cafe. You notice the downstairs study lounge to your ahead and the entrance behind you"
-    upstairsStudyLoungeDescription = "You are in the upstairs study section by the bathroooms. You notice the downstairs study lounge ahead, and the entrance behind you"
-    downstairsStudyLoungeDescription = "You are in the down stairs study lounge. The cafe is behind you and the upstairs study lounge is to your right"
+    cafeDescription = "You have entered the cafe. There are students milling around however none of them seem in a talkitive mood. \n\
+You notice a cute employee working at the coffee counter who seems friendly. The auditorium is ahead of you and the exit to the building is behind you"
+    backAuditoriumDescrip = "You have entered the back of the auditorium. \n\
+It may be a little old and the lights a little too bright, but at least the chairs are comfy. \n\
+You notice a student asleep on one of the chairs. You debate whether to bother them. \n\
+Also, you hear some angry showting coming from the front of the auditorium. Remember the coffee shop is behind you and the front of the auditorium is ahead"
+    frontAuditoriumDescrip = "You hear two students showting. They seem to be having a disagreement. \n\
+You may want to interveen. It would probably be the right thing to do. The back of the audiorium is behind you"
 
     
     #entrancePeople = {sparkDeskManager}
@@ -162,30 +177,25 @@ def main():
     
     
     #Room Objects
-    Entrance = Room("Entrance", entranceDescription, SparkDeskManager, actions)
-    Cafe = Room("Cafe", cafeDescription, CafeAttendant, actions)
-    UpstairsStudyLounge = Room("Upstairs Study Lounge", upstairsStudyLoungeDescription, SleepingStudent,actions)
-    DownstairsStudyLounge = Room("Downstairs Study Lounge", downstairsStudyLoungeDescription, CryingStudent, actions)
+    #Entrance = Room("Entrance", entranceDescription, SparkDeskManager, actions)
+    Cafe = Room("Cafe", cafeDescription, cafeAttendent, actions)
+    BackAuditorium = Room("Upstairs Study Lounge", backAuditoriumDescrip, SleepingStudent,actions)
+    FrontAuditorium = Room("Downstairs Study Lounge", frontAuditoriumDescrip, AngryStudent, actions)
     Exit = Room("Exit", "The outside of the spark")
 
     #Setting Directions
-    Entrance.forward = UpstairsStudyLounge;
-    Entrance.left = Cafe;
-    Entrance.back = Exit;
+    Cafe.forward = BackAuditorium;
+    Cafe.back = Exit;
 
-    Cafe.forward = DownstairsStudyLounge;
-    Cafe.back = Entrance;
+    BackAuditorium.forward = FrontAuditorium;
+    BackAuditorium.back = Cafe;
 
-    UpstairsStudyLounge.forward = DownstairsStudyLounge;
-    UpstairsStudyLounge.back = Entrance;
-
-    DownstairsStudyLounge.right = UpstairsStudyLounge
-    DownstairsStudyLounge.back = Cafe
+    FrontAuditorium.back = BackAuditorium
 
     
     
 
-    CurrentRoom = Entrance
+    CurrentRoom = Cafe
 
     NewRoom = CurrentRoom
 
@@ -208,12 +218,11 @@ def main():
 
 
 
+    if newFollowers:
+        return 1
+    else:
+        return 0
 
 
-#Summary: 
-#Parameters: 
-#Returns: 
-#Precond:
-#Postcond:
 
-main()
+toddHall()
