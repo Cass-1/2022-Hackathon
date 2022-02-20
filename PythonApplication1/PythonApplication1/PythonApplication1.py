@@ -6,14 +6,14 @@ import copy
 
 class Room:
     
-    def __init__ (self, name, description,personInRoom, actions, forward=None, left=None, right=None, back= None):
+    def __init__ (self, name, description, personInRoom = None, actions = None, forward=None, left=None, right=None, back= None):
         self.name = name
         self.forward = forward
         self.left = left
         self.right = right
         self.back = back
         self.description = description #a blurb once u enter the room
-        self.personInRoom = personInRoom #a list of the people in the room
+        self.personInRoom = personInRoom #a person in the room
         self.actions = copy.deepcopy(actions) # a list of the actions you can take(strings)
 
         if forward == None:
@@ -138,48 +138,71 @@ def talk_and_move(currentRoom, userInput):
 def main():
     #People
     sparkManagerTopics = ["The weather sure is nice!", "You should stop by and grab some coffee!"]
-    sparkDeskManager = Person("Mark", "Desk Manager",sparkManagerTopics , False)
+    SparkDeskManager = Person("Mark", "Desk Manager",sparkManagerTopics , False)
 
-    studyingStudentTopics = ["I have miderms soon!", "Hush! I'm trying to study"]
-    studyingStudent = Person("Samantha", "Student",studyingStudentTopics , False)
+    cafeAttendentTopics = ["Welcome! We have a staffing shortage right now so no coffe is available, sorry.", "Hello! Sadly we are not open right now. We're closed for a cleaning."]
+    CafeAttendant = Person("Samantha", "Student",cafeAttendentTopics , False)
 
     cryingStudentTopics = ["Thanks for talking with me. I've had a very long day", "I really appreciate you talking to me. It's been nice to see a friendly face!"]
-    cryingStudent = Person("Robert", "Student",cryingStudentTopics , True)
+    CryingStudent = Person("Robert", "Student",cryingStudentTopics , True)
 
     sleepingStudentTopics = ["Zzzz....", "Mghrh....zzzzz.."]
-    sleepingStudent = Person("Jane", "Student",sleepingStudentTopics , False)
+    SleepingStudent = Person("Jane", "Student",sleepingStudentTopics , False)
 
 
     #Room Descriptions
     entranceDescription = "You pass through the large main doors and find yourslef inside of The Spark. You glance around and notice a person sitting at the front desk are greated with a large staircase forward, a cafe to your left, and an exit behind you."
+    cafeDescription = "You are in the cafe. You notice the downstairs study lounge to your ahead and the entrance behind you"
+    upstairsStudyLoungeDescription = "You are in the upstairs study section by the bathroooms. You notice the downstairs study lounge ahead, and the entrance behind you"
+    downstairsStudyLoungeDescription = "You are in the down stairs study lounge. The cafe is behind you and the upstairs study lounge is to your right"
 
-
-    #People in each room and room actions
-    entrancePeople = {sparkDeskManager}
+    
+    #entrancePeople = {sparkDeskManager}
     actions = ["talk", "forward", "back", "right", "left"]
     
     
     #Room Objects
-    entrance = Room("Entrance", entranceDescription, sparkDeskManager, actions)
+    Entrance = Room("Entrance", entranceDescription, SparkDeskManager, actions)
+    Cafe = Room("Cafe", cafeDescription, CafeAttendant, actions)
+    UpstairsStudyLounge = Room("Upstairs Study Lounge", upstairsStudyLoungeDescription, SleepingStudent,actions)
+    DownstairsStudyLounge = Room("Downstairs Study Lounge", downstairsStudyLoungeDescription, CryingStudent, actions)
+    Exit = Room("Exit", "The outside of the spark")
 
     #Setting Directions
+    Entrance.forward = UpstairsStudyLounge;
+    Entrance.left = Cafe;
+    Entrance.left = Exit;
+
+    Cafe.forward = DownstairsStudyLounge;
+    Cafe.back = Entrance;
+
+    UpstairsStudyLounge.forward = DownstairsStudyLounge;
+    UpstairsStudyLounge.back = Entrance;
+
+    DownstairsStudyLounge.right = UpstairsStudyLounge
+    DownstairsStudyLounge.back = Cafe
+
     
     
 
-    currentRoom = entrance
+    CurrentRoom = Entrance
 
-    newRoom = currentRoom
+    NewRoom = CurrentRoom
 
     nextStepStr = ""
 
     #entering rooms
-    enter_room(currentRoom, currentRoom.actions)
+    enter_room(CurrentRoom, CurrentRoom.actions)
 
     #talking with people and moving between rooms
-    while newRoom == currentRoom:
-        userInput = get_action(currentRoom, currentRoom.actions)
-        newRoom, nextStepStr = talk_and_move(currentRoom, userInput)
-        print(nextStepStr)
+    while NewRoom != Exit:
+        while NewRoom == CurrentRoom:
+            userInput = get_action(CurrentRoom, CurrentRoom.actions)
+            NewRoom, nextStepStr = talk_and_move(CurrentRoom, userInput)
+            print(nextStepStr)
+        
+        CurrentRoom = NewRoom
+        enter_room(CurrentRoom, CurrentRoom.actions)
         
 
 
