@@ -268,7 +268,7 @@ def cub(followers):
                     break
 
                 elif followers == 3:
-                    print("You helped three Cougs while you were on your way to the Hackathon!! They are gratituous to you and want to join your team.")
+                    print("You helped three Cougs while you were on your way to the Hackathon!! They are gracious to you and want to join your team.")
                     print("You agree to join up to form a team of four members for the Hackathon.")
                     print("By working together your team does great during the competition.")
                     print("In fact, your team wins the competition because Cougs help Cougs! :)")
