@@ -578,6 +578,10 @@ def validate_user_input_for_spark():
 
 def main():
     #waking up and the first building
+    print("It's 8:00am. You have woken up to the sound of your alarm blaring.")
+    print("On the morning of the 2022 WSU Hackathon, you, yes you, have overslept.")
+    print("The event starts at 8:30 and you need to get moving. What do you do?")
+    print("Please enter decision number to continue.")
     morning()
     followers = 0
     followers = spark_building(followers)
