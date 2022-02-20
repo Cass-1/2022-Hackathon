@@ -105,18 +105,23 @@ def get_action(room, actions):
 #Returns: the new room the player is in, the next step string and if the player has new followers
 #Precond: user input has to be in the allowed actions
 #Postcond: a newRoom has been returned
-def talk_and_move(currentRoom, userInput):
+def talk_and_move(currentRoom, userInput, newFollowers):
 
     successfulMovement = False
-    newFollowers = False
+    #newFollowers = False
     nextStepStr = ""
     
+    
+        
+
     #what to do based on input
     if userInput == "talk":
         print(currentRoom.personInRoom.conversation())
-        if(currentRoom.name == "Upstairs Study Lounge"):
+        #check if you have helped the people arguing
+        if(currentRoom.name == "Front of the Auditorium"):
             newFollowers = True
         nextStepStr = "You have now talked to everyone here"
+        return currentRoom, nextStepStr, newFollowers
     elif userInput == "forward":
         successfulMovement, newRoom = check_movement(currentRoom, "forward")
                 
@@ -131,7 +136,7 @@ def talk_and_move(currentRoom, userInput):
         
     if successfulMovement == True:
         nextStepStr = "Moved rooms"
-        return newRoom, nextStepStr, newFollwers
+        return newRoom, nextStepStr, newFollowers
     else:
         nextStepStr = "Rememeber, you're late! Please enter a room you can travel too"
         return currentRoom, nextStepStr, newFollowers
@@ -179,9 +184,9 @@ You may want to interveen. It would probably be the right thing to do. The back 
     #Room Objects
     #Entrance = Room("Entrance", entranceDescription, SparkDeskManager, actions)
     Cafe = Room("Cafe", cafeDescription, cafeAttendent, actions)
-    BackAuditorium = Room("Upstairs Study Lounge", backAuditoriumDescrip, SleepingStudent,actions)
-    FrontAuditorium = Room("Downstairs Study Lounge", frontAuditoriumDescrip, AngryStudent, actions)
-    Exit = Room("Exit", "The outside of the spark")
+    BackAuditorium = Room("Back of the Auditorium", backAuditoriumDescrip, SleepingStudent,actions)
+    FrontAuditorium = Room("Front of the Auditorium", frontAuditoriumDescrip, AngryStudent, actions)
+    Exit = Room("Exit", "The outside of Todd Hall")
 
     #Setting Directions
     Cafe.forward = BackAuditorium;
@@ -208,8 +213,15 @@ You may want to interveen. It would probably be the right thing to do. The back 
     while NewRoom != Exit:
         while NewRoom == CurrentRoom:
             userInput = get_action(CurrentRoom, CurrentRoom.actions)
-            NewRoom, nextStepStr = talk_and_move(CurrentRoom, userInput)
+            NewRoom, nextStepStr, newFollowers = talk_and_move(CurrentRoom, userInput, newFollowers)
             print(nextStepStr)
+            
+            #check to see if you have helped the arguing people
+            if newFollowers:
+                BackAuditorium.description = "You have entered the back of the auditorium. \nIt may be a little old and the lights a little too bright, but at least the chairs are comfy. \nYou notice a student asleep on one of the chairs. You debate whether to bother them. \nYou no longer hear the angry shouting."
+                FrontAuditorium.description = "You are in the front of the Auditorium and they are no longer arguing. They seem to have resolved their issues.\n Remember the back of the auditorium is behind you"
+                AngryStudent.topics = ["Thanks for talking to us. We resloved our differences"]
+        
         
         CurrentRoom = NewRoom
         enter_room(CurrentRoom, CurrentRoom.actions)
