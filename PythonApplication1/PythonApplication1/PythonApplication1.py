@@ -171,7 +171,7 @@ def main():
     #Setting Directions
     Entrance.forward = UpstairsStudyLounge;
     Entrance.left = Cafe;
-    Entrance.left = Exit;
+    Entrance.back = Exit;
 
     Cafe.forward = DownstairsStudyLounge;
     Cafe.back = Entrance;
