@@ -93,7 +93,7 @@ def get_action(room, actions):
 
     #validate user input
     while userInput not in actions:
-        print("Not a valid action")
+        print("Not a valid action\n")
         userInput = input(": ")
 
     return userInput
@@ -120,7 +120,7 @@ def talk_and_move(currentRoom, userInput, newFollowers):
         #check if you have helped the people arguing
         if(currentRoom.name == "Front of the Auditorium"):
             newFollowers = True
-        nextStepStr = "You have now talked to everyone here"
+        nextStepStr = "You have now talked to everyone here\n"
         return currentRoom, nextStepStr, newFollowers
     elif userInput == "forward":
         successfulMovement, newRoom = check_movement(currentRoom, "forward")
@@ -135,10 +135,10 @@ def talk_and_move(currentRoom, userInput, newFollowers):
         successfulMovement, newRoom = check_movement(currentRoom, "left")
         
     if successfulMovement == True:
-        nextStepStr = "Moved rooms"
+        nextStepStr = "Moved rooms\n"
         return newRoom, nextStepStr, newFollowers
     else:
-        nextStepStr = "Rememeber, you're late! Please enter a room you can travel too"
+        nextStepStr = "Rememeber, you're late! Please enter a room you can travel too\n"
         return currentRoom, nextStepStr, newFollowers
 
 
@@ -153,13 +153,13 @@ def toddHall():
     #buisnessStudentTopics = ["I have midterms this week! I don't have time to talk!", "I don't have time to hear about your Hackathon! I have exams!"]
     #SparkDeskManager = Person("Mark", "Desk Manager",buisnessStudentTopics , False)
 
-    cafeAttendentTopics = ["Welcome! We have a staffing shortage right now so no coffe is available, sorry.", "Hello! Sadly we are not open right now. We're closed for a cleaning."]
+    cafeAttendentTopics = ["Welcome! We have a staffing shortage right now so no coffe is available, sorry.\n", "Hello! Sadly we are not open right now. We're closed for a cleaning.\n"]
     cafeAttendent = Person("Samantha", "Student",cafeAttendentTopics , False)
 
-    angryStudentTopics = ["What the h*** is wrong with you Gary we had a deal!\n...\nWhy are you inturupting us?!\n...\n....\nOk fair point but...\n...\nOk ok fine. I guess you're right. I guess we can reach an agreement"]
+    angryStudentTopics = ["What the h*** is wrong with you Gary we had a deal!\n...\nWhy are you inturupting us?!\n...\n....\nOk fair point but...\n...\nOk ok fine. I guess you're right. I guess we can reach an agreement.\n\nYou feel good after helping some fellow Cougs resolve their issues!\n"]
     AngryStudent = Person("Robert", "Student",angryStudentTopics , True)
 
-    sleepingStudentTopics = ["Zzzz....", "Mghrh....zzzzz.."]
+    sleepingStudentTopics = ["Zzzz....\n", "Mghrh....zzzzz..\n"]
     SleepingStudent = Person("Jane", "Student",sleepingStudentTopics , False)
 
     #sleepingStudentTopics = ["Zzzz....", "Mghrh....zzzzz.."]
@@ -168,13 +168,13 @@ def toddHall():
 
     #Room Descriptions
     cafeDescription = "You have entered the cafe. There are students milling around however none of them seem in a talkitive mood. \n\
-You notice a cute employee working at the coffee counter who seems friendly. The auditorium is ahead of you and the exit to the building is behind you"
+You notice a cute employee working at the coffee counter who seems friendly. The auditorium is ahead of you and the exit to the building is behind you.\n"
     backAuditoriumDescrip = "You have entered the back of the auditorium. \n\
 It may be a little old and the lights a little too bright, but at least the chairs are comfy. \n\
 You notice a student asleep on one of the chairs. You debate whether to bother them. \n\
-Also, you hear some angry showting coming from the front of the auditorium. Remember the coffee shop is behind you and the front of the auditorium is ahead"
+Also, you hear some angry showting coming from the front of the auditorium. Remember the coffee shop is behind you and the front of the auditorium is ahead.\n"
     frontAuditoriumDescrip = "You hear two students showting. They seem to be having a disagreement. \n\
-You may want to interveen. It would probably be the right thing to do. The back of the audiorium is behind you"
+You may want to interveen. It would probably be the right thing to do. The back of the audiorium is behind you.\n"
 
     
     #entrancePeople = {sparkDeskManager}
@@ -218,9 +218,9 @@ You may want to interveen. It would probably be the right thing to do. The back 
             
             #check to see if you have helped the arguing people
             if newFollowers:
-                BackAuditorium.description = "You have entered the back of the auditorium. \nIt may be a little old and the lights a little too bright, but at least the chairs are comfy. \nYou notice a student asleep on one of the chairs. You debate whether to bother them. \nYou no longer hear the angry shouting."
-                FrontAuditorium.description = "You are in the front of the Auditorium and they are no longer arguing. They seem to have resolved their issues.\n Remember the back of the auditorium is behind you"
-                AngryStudent.topics = ["Thanks for talking to us. We resloved our differences"]
+                BackAuditorium.description = "You have entered the back of the auditorium. \nIt may be a little old and the lights a little too bright, but at least the chairs are comfy. \nYou notice a student asleep on one of the chairs. You debate whether to bother them. \nYou no longer hear the angry shouting.\n"
+                FrontAuditorium.description = "You are in the front of the Auditorium and they are no longer arguing. They seem to have resolved their issues.\n Remember the back of the auditorium is behind you.\n"
+                AngryStudent.topics = ["Thanks for talking to us. We resloved our differences\n"]
         
         
         CurrentRoom = NewRoom
